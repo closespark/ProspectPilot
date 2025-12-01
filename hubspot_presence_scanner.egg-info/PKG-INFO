@@ -1,3 +1,22 @@
+Metadata-Version: 2.1
+Name: hubspot-presence-scanner
+Version: 1.0.0
+Summary: Detect HubSpot usage on websites by scanning for tracking codes, forms, and COS signatures
+Home-page: https://github.com/inevitablesale/hubspot-presence-scanner
+Author: HubSpot Scanner Team
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+
 # HubSpot Presence Scanner
 
 Lightweight domain crawler that detects HubSpot usage across business websites by scanning for tracking codes, COS signatures, embedded forms, script tags, and API endpoints. When HubSpot is detected, it also crawls the site to find non-generic email addresses. Built for consultants, revops teams, and automation workflows that need to identify HubSpot-powered organizations at scale.

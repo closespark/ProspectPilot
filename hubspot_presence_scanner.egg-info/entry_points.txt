@@ -1,0 +1,2 @@
+[console_scripts]
+hubspot-scanner = hubspot_scanner.cli:main
