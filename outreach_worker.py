@@ -138,7 +138,7 @@ def fetch_leads(supabase) -> list[dict]:
     # Filter to only leads with non-empty email arrays
     leads = [
         lead for lead in (query.data or [])
-        if lead.get("emails") and len(lead.get("emails", [])) > 0
+        if lead.get("emails")
     ]
     print(f"[OUTREACH] Loaded {len(leads)} available leads with emails")
     return leads

@@ -1,3 +1,6 @@
+# Render deployment configuration for HubSpot Domain Pipeline
+# Replace placeholder values with your own before deploying
+
 services:
   - type: worker
     name: hubspot-domain-pipeline-worker
@@ -6,8 +9,9 @@ services:
     dockerfilePath: ./Dockerfile
     autoDeploy: true
     envVars:
+      # Replace with your Supabase project URL
       - key: SUPABASE_URL
-        value: https://dlcjgctfijlnolktfmfg.supabase.co
+        sync: false
       - key: SUPABASE_SERVICE_KEY
         sync: false
       - key: SUPABASE_TABLE
@@ -32,8 +36,9 @@ services:
     dockerfilePath: ./Dockerfile
     autoDeploy: true
     envVars:
+      # Replace with your Supabase project URL
       - key: SUPABASE_URL
-        value: https://dlcjgctfijlnolktfmfg.supabase.co
+        sync: false
       - key: SUPABASE_SERVICE_KEY
         sync: false
       - key: OUTREACH_TABLE
