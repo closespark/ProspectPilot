@@ -59,7 +59,6 @@ def setup_logging():
     # Add stdout handler (Render captures stdout)
     stdout_handler = logging.StreamHandler(sys.stdout)
     stdout_handler.setFormatter(formatter)
-    stdout_handler.setLevel(getattr(logging, log_level, logging.INFO))
     root_logger.addHandler(stdout_handler)
     
     return logging.getLogger("outreach")
