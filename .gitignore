@@ -73,3 +73,7 @@ Thumbs.db
 # Project specific
 results.json
 /tmp/
+leads/
+places_data.json
+processed_domains.json
+zapmail_config.json

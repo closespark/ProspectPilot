@@ -165,8 +165,61 @@ See the `examples/` directory for more usage examples:
 
 - `basic_usage.py` - Single domain scanning
 - `batch_scan.py` - Multiple domain scanning with progress
+- `category_scraper.py` - Scrape Google Places by business category using Apify
+- `daily_pipeline.py` - Full automated lead generation pipeline
+- `zapmail_config.sample.json` - Sample Zapmail inbox configuration
 - `domains.txt` - Sample domain list
 - `sample_output.json` - Example output format
+
+## Daily Pipeline
+
+The `daily_pipeline.py` script implements an end-to-end automated pipeline that:
+
+1. **Scrapes Google Places** - Uses Apify's Compass crawler to find businesses by category
+2. **Deduplicates domains** - Tracks processed domains to avoid rescanning
+3. **Scans for HubSpot** - Detects HubSpot presence and extracts portal IDs
+4. **Extracts emails** - Crawls sites with HubSpot to find non-generic contact emails
+5. **Saves structured leads** - Outputs JSON records with all lead data
+6. **Sends outreach** - Optionally sends emails through Zapmail pre-warmed inboxes
+
+### Pipeline Usage
+
+```bash
+# Set required environment variables
+export APIFY_TOKEN="your_apify_token"
+
+# Run the daily pipeline (uses today's category based on day of year)
+python examples/daily_pipeline.py
+
+# Run with a specific category
+python examples/daily_pipeline.py --category "accountant"
+
+# Dry run to see what would be processed
+python examples/daily_pipeline.py --dry-run
+
+# Enable email sending
+export ZAPMAIL_CONFIG="path/to/zapmail_config.json"
+python examples/daily_pipeline.py --send-emails
+```
+
+### Zapmail Configuration
+
+To enable email sending, create a `zapmail_config.json` file (see `zapmail_config.sample.json`):
+
+```json
+{
+  "inboxes": [
+    {
+      "email": "sender@warmeddomain.com",
+      "smtp_host": "smtp.gmail.com",
+      "smtp_port": 587,
+      "smtp_user": "sender@warmeddomain.com",
+      "smtp_password": "your_app_password",
+      "daily_limit": 40
+    }
+  ]
+}
+```
 
 ## Use Cases
 
@@ -175,6 +228,7 @@ See the `examples/` directory for more usage examples:
 - **Market Research**: Survey HubSpot adoption across industries
 - **Integration Planning**: Identify potential integration partners
 - **RevOps Workflows**: Automate HubSpot user identification
+- **Automated Outreach**: Daily pipeline for discovering and contacting prospects
 
 ## Requirements
 
@@ -182,6 +236,7 @@ See the `examples/` directory for more usage examples:
 - requests
 - beautifulsoup4
 - lxml
+- apify-client (for Google Places scraping)
 
 ## License
 
