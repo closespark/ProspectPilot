@@ -32,7 +32,7 @@ GENERIC_EMAIL_PREFIXES = frozenset([
 
 # Email regex pattern
 EMAIL_PATTERN = re.compile(
-    r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b'
 )
 
 # Common pages that might contain contact information

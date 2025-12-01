@@ -1,6 +1,7 @@
 """Domain scanning functionality for HubSpot detection."""
 
 import re
+from collections.abc import Callable
 from typing import Any
 from urllib.parse import urlparse
 
@@ -251,13 +252,12 @@ def scan_domain(
 
     for pattern, weight, description in inline_patterns:
         if re.search(pattern, inline_content, re.IGNORECASE):
-            signal_exists = any(
-                s["name"] == f"inline-{pattern}" for s in result.signals
-            )
+            signal_name = f"inline-{description.lower().replace(' ', '-')}"
+            signal_exists = any(s["name"] == signal_name for s in result.signals)
             if not signal_exists:
                 result.signals.append(
                     {
-                        "name": f"inline-{description.lower().replace(' ', '-')}",
+                        "name": signal_name,
                         "description": description,
                         "weight": weight,
                     }
@@ -287,7 +287,7 @@ def scan_domains(
     domains: list[str],
     timeout: int = DEFAULT_TIMEOUT,
     user_agent: str = DEFAULT_USER_AGENT,
-    progress_callback: callable = None,
+    progress_callback: Callable[[int, int, str], None] | None = None,
     crawl_emails: bool = True,
     max_pages: int = 10,
 ) -> list[dict[str, Any]]:
