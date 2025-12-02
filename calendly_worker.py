@@ -25,6 +25,7 @@ import os
 import sys
 import time
 from datetime import datetime, timezone
+from typing import Any
 
 from calendly_sync import sync_calendly_bookings, get_booking_analytics
 
@@ -102,7 +103,7 @@ def validate_config() -> bool:
     return True
 
 
-def run_sync() -> dict[str, int]:
+def run_sync() -> dict[str, Any]:
     """
     Run the Calendly sync process.
 

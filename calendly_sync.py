@@ -220,11 +220,17 @@ def extract_booking_info(
         if not email:
             continue
 
+        # Extract event UUID from URI with validation
+        event_uri = event.get("uri", "")
+        event_uuid = ""
+        if event_uri and "/" in event_uri:
+            event_uuid = event_uri.split("/")[-1]
+
         booking = {
             "invitee_email": email,
             "invitee_name": invitee.get("name", ""),
-            "event_uri": event.get("uri", ""),
-            "event_uuid": event.get("uri", "").split("/")[-1],
+            "event_uri": event_uri,
+            "event_uuid": event_uuid,
             "event_name": event.get("name", ""),
             "event_type_uri": event.get("event_type", ""),
             "event_start_time": event.get("start_time"),
@@ -257,18 +263,29 @@ def match_booking_to_lead(
         Matching lead record or None if not found
     """
     # Search for leads where the emails array contains this email
-    # We need to check if invitee_email is in the emails JSONB array
-    response = supabase.table(table).select("*").execute()
+    # Use JSONB containment operator for efficient database-level filtering
+    try:
+        # Try using the contains filter for JSONB arrays
+        response = supabase.table(table).select("*").contains(
+            "emails", [invitee_email]
+        ).execute()
 
-    for lead in response.data or []:
-        emails = lead.get("emails", [])
-        if not emails:
-            continue
+        if response.data:
+            return response.data[0]
+    except Exception:
+        # Fall back to fetching leads that have been emailed and checking in memory
+        # This handles cases where the JSONB query might not work as expected
+        response = supabase.table(table).select("*").eq("emailed", True).execute()
 
-        # Check if invitee_email matches any email in the lead
-        for email in emails:
-            if email.lower().strip() == invitee_email:
-                return lead
+        for lead in response.data or []:
+            emails = lead.get("emails", [])
+            if not emails:
+                continue
+
+            # Check if invitee_email matches any email in the lead
+            for email in emails:
+                if email.lower().strip() == invitee_email:
+                    return lead
 
     return None
 

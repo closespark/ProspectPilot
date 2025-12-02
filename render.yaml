@@ -76,16 +76,19 @@ services:
         value: "7"
 
 cronJobs:
+  # Runs at 6:00 AM UTC daily
   - name: daily-tech-domain-scan
     schedule: "0 6 * * *"
     service: tech-scan-pipeline-worker
     command: "python pipeline_worker.py"
 
+  # Runs at 2:00 PM UTC daily
   - name: daily-outreach-send
     schedule: "0 14 * * *"
     service: outreach-worker
     command: "python outreach_worker.py"
 
+  # Runs at 8:00 PM UTC daily (after outreach has run)
   - name: daily-calendly-sync
     schedule: "0 20 * * *"
     service: calendly-sync-worker
