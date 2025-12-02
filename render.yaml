@@ -53,6 +53,28 @@ services:
       - key: SMTP_SEND_DELAY_SECONDS
         value: "4"
 
+  - type: worker
+    name: calendly-sync-worker
+    env: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    envVars:
+      # Replace with your Supabase project URL
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      # Calendly Personal Access Token
+      - key: CALENDLY_API_TOKEN
+        sync: false
+      - key: CALENDLY_SYNC_TABLE
+        value: tech_scans
+      - key: CALENDLY_BOOKINGS_TABLE
+        value: calendly_bookings
+      - key: CALENDLY_LOOKBACK_DAYS
+        value: "7"
+
 cronJobs:
   - name: daily-tech-domain-scan
     schedule: "0 6 * * *"
@@ -63,3 +85,8 @@ cronJobs:
     schedule: "0 14 * * *"
     service: outreach-worker
     command: "python outreach_worker.py"
+
+  - name: daily-calendly-sync
+    schedule: "0 20 * * *"
+    service: calendly-sync-worker
+    command: "python calendly_worker.py"

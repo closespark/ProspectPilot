@@ -267,6 +267,7 @@ Set these in the Render dashboard:
 | `SUPABASE_SERVICE_KEY` | Supabase service role key (secret) |
 | `APIFY_TOKEN` | Apify API token (secret) |
 | `SMTP_ACCOUNTS_JSON` | JSON object with "inboxes" array (secret) - see format above |
+| `CALENDLY_API_TOKEN` | Calendly Personal Access Token (secret) - for booking tracking |
 
 #### Optional Variables
 | Variable | Default | Description |
@@ -286,6 +287,9 @@ Set these in the Render dashboard:
 | `OUTREACH_DAILY_LIMIT` | `500` | Max emails per day |
 | `OUTREACH_PER_INBOX_LIMIT` | `50` | Max emails per SMTP inbox |
 | `SMTP_SEND_DELAY_SECONDS` | `4` | Delay between emails in seconds |
+| `CALENDLY_SYNC_TABLE` | `tech_scans` | Table containing leads to match |
+| `CALENDLY_BOOKINGS_TABLE` | `calendly_bookings` | Table for storing booking records |
+| `CALENDLY_LOOKBACK_DAYS` | `7` | Days to look back for Calendly events |
 
 ### Deploy to Render
 
@@ -309,6 +313,9 @@ python pipeline_worker.py
 
 # Run outreach worker
 python outreach_worker.py
+
+# Run Calendly sync worker
+python calendly_worker.py
 
 # Test SMTP sending
 python scripts/smtp_test_send.py
@@ -348,6 +355,7 @@ The system automatically tracks performance metrics for each combination of pers
 |-------|---------|
 | `email_stats` | Aggregate counters per persona/tech/variant combo |
 | `domain_email_history` | Per-domain history for variant suppression |
+| `calendly_bookings` | Booking records with matched lead metadata |
 
 ### Analytics Views
 
@@ -360,6 +368,117 @@ SELECT * FROM v_persona_stats;
 
 -- Tech performance summary
 SELECT * FROM v_tech_stats;
+
+-- Conversion funnel (emails sent -> bookings)
+SELECT * FROM v_conversion_funnel ORDER BY conversion_rate_pct DESC;
+
+-- Bookings by persona
+SELECT * FROM v_persona_conversions;
+
+-- Bookings by variant
+SELECT * FROM v_variant_conversions;
+
+-- Bookings by technology
+SELECT * FROM v_tech_conversions;
+```
+
+## Calendly Integration
+
+The system integrates with Calendly to track which outreach emails led to booked meetings. This enables end-to-end conversion analytics by persona, email variant, and technology.
+
+### How It Works
+
+1. **Calendly Worker** (`calendly_worker.py`) - Runs daily at 8:00 PM UTC
+   - Fetches recent scheduled events from Calendly API
+   - Extracts invitee email addresses
+   - Matches invitee emails against leads in `tech_scans` table
+   - Updates matched leads with booking status
+   - Saves booking records to `calendly_bookings` table with full metadata
+
+2. **Booking Records** store:
+   - Invitee email and name
+   - Event details (name, start/end time, status)
+   - Matched lead ID and domain
+   - Persona, variant_id, and main_tech from the outreach email
+
+### Setup
+
+1. **Get Calendly Personal Access Token**:
+   - Go to [Calendly Integrations](https://calendly.com/integrations/api_webhooks)
+   - Generate a Personal Access Token
+   - Copy the token (it won't be shown again)
+
+2. **Set Environment Variable**:
+   ```bash
+   CALENDLY_API_TOKEN=your_personal_access_token
+   ```
+
+3. **Run Supabase Schema Migration**:
+   ```sql
+   -- Add booking fields to tech_scans table
+   ALTER TABLE tech_scans ADD COLUMN IF NOT EXISTS booked boolean;
+   ALTER TABLE tech_scans ADD COLUMN IF NOT EXISTS booked_at timestamptz;
+   ALTER TABLE tech_scans ADD COLUMN IF NOT EXISTS calendly_event_uri text;
+   ALTER TABLE tech_scans ADD COLUMN IF NOT EXISTS calendly_invitee_email text;
+   ALTER TABLE tech_scans ADD COLUMN IF NOT EXISTS calendly_event_name text;
+   
+   -- Create calendly_bookings table (see config/supabase_schema.sql for full schema)
+   ```
+
+### Analytics Queries
+
+```sql
+-- Which persona drives the most bookings?
+SELECT persona, total_bookings, matched_bookings 
+FROM v_persona_conversions 
+ORDER BY total_bookings DESC;
+
+-- Which email variant has the best conversion rate?
+SELECT variant_id, main_tech, persona, total_bookings
+FROM v_variant_conversions 
+WHERE total_bookings > 0
+ORDER BY total_bookings DESC;
+
+-- Full conversion funnel by persona/variant
+SELECT 
+    persona,
+    variant_id,
+    emails_sent,
+    bookings,
+    conversion_rate_pct
+FROM v_conversion_funnel
+WHERE emails_sent > 10
+ORDER BY conversion_rate_pct DESC;
+
+-- Technology performance (which tech stacks book most?)
+SELECT main_tech, total_bookings
+FROM v_tech_conversions
+ORDER BY total_bookings DESC;
+```
+
+### Python Usage
+
+```python
+from calendly_sync import sync_calendly_bookings, get_booking_analytics
+
+# Run sync manually
+stats = sync_calendly_bookings(
+    calendly_token="your_token",
+    supabase_url="your_url",
+    supabase_key="your_key",
+    lookback_days=7,
+)
+print(f"Matched {stats['leads_matched']} leads with bookings")
+
+# Get analytics breakdown
+analytics = get_booking_analytics(
+    supabase_url="your_url",
+    supabase_key="your_key",
+)
+print(f"Total bookings: {analytics['total_bookings']}")
+print(f"By persona: {analytics['by_persona']}")
+print(f"By variant: {analytics['by_variant']}")
+print(f"By tech: {analytics['by_tech']}")
 ```
 
 ## Variant Suppression
