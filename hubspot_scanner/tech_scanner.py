@@ -28,7 +28,17 @@ DEFAULT_USER_AGENT = (
 
 @dataclass
 class TechScanResult:
-    """Complete result of technology scan with scoring and email."""
+    """Complete result of technology scan with scoring and email.
+    
+    Attributes:
+        domain: The scanned domain name.
+        technologies: List of detected technology names.
+        scored_technologies: List of technologies with scores and categories.
+        top_technology: The highest-scored technology detected.
+        emails: List of extracted email addresses from the page (non-generic).
+        generated_email: AI-generated outreach email content (if requested).
+        error: Error message if scan failed, None otherwise.
+    """
 
     domain: str
     technologies: list[str] = field(default_factory=list)
@@ -156,13 +166,14 @@ def scan_technologies(
             error=error,
         )
 
+    # Extract emails from the page (do this once, regardless of technology detection)
+    extracted_emails = sorted(extract_emails_from_html(html_content, domain))
+
     # Detect technologies
     detector = TechDetector()
     detection_result = detector.detect(domain, html_content, headers)
 
     if not detection_result.technologies:
-        # Extract emails even if no technologies detected
-        extracted_emails = sorted(extract_emails_from_html(html_content, domain))
         return TechScanResult(
             domain=domain,
             technologies=[],
@@ -177,9 +188,6 @@ def scan_technologies(
     # Get top technology
     top_tech = scored[0] if scored else None
     top_tech_dict = to_dict(top_tech) if top_tech else None
-
-    # Extract emails from the page
-    extracted_emails = sorted(extract_emails_from_html(html_content, domain))
 
     # Generate email if requested
     email_dict = None
