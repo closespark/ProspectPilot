@@ -194,7 +194,7 @@ TECHNOLOGY_CATEGORIES = {
         "subject_templates": [
             "{{MainTech}} config idea",
             "Quick {{MainTech}} question",
-            "Server optimization help",
+            "{{MainTech}} optimization help",
         ],
         "recent_projects": {
             "nginx": "optimized nginx configuration for better performance and caching",
