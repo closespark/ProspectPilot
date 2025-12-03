@@ -799,14 +799,18 @@ Technologies are scored 1-5 based on value/specialization:
 
 ## 💰 Monetization
 
-**Recommended Strategy: Consulting + Productized Templates**
+**Core Principle: Sell Outcomes, Not Code**
 
-ProspectPilot is best monetized through consulting services and productized templates rather than building a SaaS. This approach:
-- Generates revenue immediately (vs. 3-6 months for SaaS)
-- Requires no additional infrastructure
-- Validates demand before major investment
+Your buyers pay for leads, candidates, enrichment, automations that save hours, and tools that help them win contracts. The GitHub repo is proof of work and a marketing asset — not the product itself.
 
-See [MONETIZATION.md](MONETIZATION.md) for the full analysis, pricing recommendations, and action plan.
+**Reality-based pricing:**
+- Pipeline Setup: $750
+- Pipeline-as-a-Service: $99–$499/mo
+- Outbound Machine Build: $2,500
+- Custom CRM Integration: $4,000–$10,000
+- Complete Agency Suite: $7,500+
+
+See [MONETIZATION.md](MONETIZATION.md) for the full pricing strategy and action plan.
 
 ## 📜 License
 
