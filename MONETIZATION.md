@@ -58,7 +58,7 @@ Lightweight alternative targeting recruiting agencies:
 - Sends Slack/Email/SMS alerts
 - AI ranking of "hot leads" by deal potential
 
-This is exactly what jobspy.io charges — your version is better.
+This pricing is competitive with jobspy.io and similar services in the market.
 
 ---
 
@@ -102,7 +102,7 @@ A full stack for recruiting or BD agencies:
 - Custom dashboard
 - SOPs and training
 
-Every small recruiting or BD agency is used to paying $15–50K for software implementations. **$7,500 is an easy sell.**
+Small recruiting and BD agencies typically pay $15–50K for software implementations. **$7,500 represents competitive value in this market.**
 
 ---
 
