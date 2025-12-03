@@ -88,7 +88,8 @@ This makes ProspectPilot one of the lowest-cost fully autonomous outbound system
 10. [Supported Technologies](#supported-technologies)
 11. [Technology Scoring](#technology-scoring)
 12. [Requirements](#requirements)
-13. [License](#license)
+13. [Monetization](#monetization)
+14. [License](#license)
 
 ---
 
@@ -795,6 +796,17 @@ Technologies are scored 1-5 based on value/specialization:
 - supabase
 - python-dotenv
 - openai (optional, for email rewriting)
+
+## 💰 Monetization
+
+Interested in monetizing ProspectPilot? We've documented several strategies for turning this project into a revenue stream. See [MONETIZATION.md](MONETIZATION.md) for:
+
+- **Core Free vs Pro Paid Model** - Keep the core open-source, offer Pro features with a paid license
+- **Managed Hosted SaaS** - Transform ProspectPilot into a hosted service with a web dashboard
+- **Customization, Consulting & Support** - Offer implementation services, custom integrations, and priority support
+- **Productized Templates** - Package components as standalone products ($29-$499)
+
+See [MONETIZATION.md](MONETIZATION.md) for detailed pricing recommendations, phased rollout strategy, and revenue projections.
 
 ## 📜 License
 
