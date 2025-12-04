@@ -31,7 +31,7 @@ ProspectPilot is a fully automated cold email engine and lead generation system 
 
 ---
 
-### ⭐ PACKAGE 2 — Done-For-You Deployment (No Customization)  
+### ⭐ PACKAGE 2 — Done-For-You Deployment  
 **$1,800 — one-time setup**
 
 **Includes:**
@@ -42,12 +42,14 @@ ProspectPilot is a fully automated cold email engine and lead generation system 
 - Close Spark sets up all environment variables  
 - Close Spark runs a test (scrape → enrich → outreach)  
 - Close Spark provides a one-time 10–15 min handoff video  
+- Custom personas  
+- Custom email templates  
+- Custom categories  
+- Custom OpenAI prompt  
 
 **Does NOT include:**
 
-- Custom personas  
 - Custom logic  
-- Category changes  
 - CRM mapping  
 - Ongoing support  
 - Feature enhancements  
@@ -63,12 +65,14 @@ Only available after purchasing Package 1 or Package 2.
 
 **Examples of billable customizations:**
 
-- Custom personas  
+- Custom personas (Package 1 only — included in Package 2)  
+- Custom email templates (Package 1 only — included in Package 2)  
+- Custom categories (Package 1 only — included in Package 2)  
 - Editing outreach logic  
 - Adjusting scoring rules  
-- Category changes  
 - Basic HubSpot/Salesforce field mapping  
-- Minor modifications to existing workers
+- Minor modifications to existing workers  
+- Integrations with Apollo, ZoomInfo, PhantomBuster
 
 ---
 
